@@ -20,33 +20,33 @@
 <body>
 
 <script>
-AFRAME.registerComponent('drag-rotate', {
-  schema: {
-    speed: { default: 200 }
-  },
-
+AFRAME.registerComponent('touch-rotate', {
   init: function () {
-    this.isDown = false;
     this.startX = 0;
-    this.rotation = this.el.getAttribute('rotation');
+    this.startY = 0;
+    this.rot = this.el.getAttribute('rotation');
 
     this.el.sceneEl.addEventListener('touchstart', (e) => {
-      this.isDown = true;
-      this.startX = e.touches[0].pageX;
-    });
-
-    this.el.sceneEl.addEventListener('touchend', () => {
-      this.isDown = false;
+      if (e.touches.length === 1) {
+        this.startX = e.touches[0].pageX;
+        this.startY = e.touches[0].pageY;
+      }
     });
 
     this.el.sceneEl.addEventListener('touchmove', (e) => {
-      if (!this.isDown) return;
+      if (e.touches.length === 1) {
 
-      let deltaX = e.touches[0].pageX - this.startX;
-      this.startX = e.touches[0].pageX;
+        let dx = e.touches[0].pageX - this.startX;
+        let dy = e.touches[0].pageY - this.startY;
 
-      this.rotation.y += deltaX / this.data.speed;
-      this.el.setAttribute('rotation', this.rotation);
+        this.startX = e.touches[0].pageX;
+        this.startY = e.touches[0].pageY;
+
+        this.rot.y += dx * 0.5;
+        this.rot.x += dy * 0.5;
+
+        this.el.setAttribute('rotation', this.rot);
+      }
     });
   }
 });
@@ -67,7 +67,7 @@ AFRAME.registerComponent('drag-rotate', {
     <a-gltf-model
       src="scene.glb"
       rotation="0 180 0"
-      drag-rotate
+      touch-rotate
     ></a-gltf-model>
 
   </a-entity>
