@@ -19,6 +19,39 @@
 
 <body>
 
+<script>
+AFRAME.registerComponent('drag-rotate', {
+  schema: {
+    speed: { default: 200 }
+  },
+
+  init: function () {
+    this.isDown = false;
+    this.startX = 0;
+    this.rotation = this.el.getAttribute('rotation');
+
+    this.el.sceneEl.addEventListener('touchstart', (e) => {
+      this.isDown = true;
+      this.startX = e.touches[0].pageX;
+    });
+
+    this.el.sceneEl.addEventListener('touchend', () => {
+      this.isDown = false;
+    });
+
+    this.el.sceneEl.addEventListener('touchmove', (e) => {
+      if (!this.isDown) return;
+
+      let deltaX = e.touches[0].pageX - this.startX;
+      this.startX = e.touches[0].pageX;
+
+      this.rotation.y += deltaX / this.data.speed;
+      this.el.setAttribute('rotation', this.rotation);
+    });
+  }
+});
+</script>
+
 <a-scene
   mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
   vr-mode-ui="enabled: false"
@@ -34,6 +67,7 @@
     <a-gltf-model
       src="scene.glb"
       rotation="0 180 0"
+      drag-rotate
     ></a-gltf-model>
 
   </a-entity>
