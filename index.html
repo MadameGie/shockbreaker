@@ -57,17 +57,19 @@
     <a-light type="directional" intensity="1" position="1 1 1"></a-light>
 
     <!-- MARKER TARGET -->
-    <a-entity mindar-image-target="targetIndex: 0">
+<a-entity mindar-image-target="targetIndex: 0">
 
-      <!-- 3D MODEL -->
-      <a-gltf-model
-        src="scene.gltf"
-        position="0 0 0"
-        scale="0.5 0.5 0.5"
-        rotation="0 0 0"
-      ></a-gltf-model>
+  <a-entity position="0 0 0" scale="3 3 3">
 
-    </a-entity>
+    <a-glb-model
+      src="scene.glb"
+      rotation="0 180 0"
+      animation-mixer
+    ></a-glb-model>
+
+  </a-entity>
+
+</a-entity>
 
   </a-scene>
 </div>
